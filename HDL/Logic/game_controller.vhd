@@ -264,7 +264,7 @@ begin
                 when "01" =>
                     mem_clear <= '1';
                     if render_busy_falling = '1' then
-                        if input_down_buffer /= "000" then
+                        if input_down_buffer /= "00" then
                             score_clear <= '1';
                         else
                             score_clear <= '0';

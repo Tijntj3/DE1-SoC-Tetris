@@ -56,253 +56,253 @@ architecture behavioural of DE1_SoC_top is
     constant const_50M                      :       std_logic_vector(25 downto 0)   := "10111110101111000001111111";
 
     --Clocking
-    signal pll_reset                    :       std_logic                       := '0';
-    signal pixel_clk                    :       std_logic                       := '0';
-    signal vga_pixel_clk                :       std_logic                       := '0';
-    signal svga_pixel_clk               :       std_logic                       := '0';
-    signal xga_pixel_clk                :       std_logic                       := '0';
-    signal clk_50_counter               :       unsigned(25 downto 0)           := (others => '0');
+    signal pll_reset                        :       std_logic                       := '0';
+    signal pixel_clk                        :       std_logic                       := '0';
+    signal vga_pixel_clk                    :       std_logic                       := '0';
+    signal svga_pixel_clk                   :       std_logic                       := '0';
+    signal xga_pixel_clk                    :       std_logic                       := '0';
+    signal clk_50_counter                   :       unsigned(25 downto 0)           := (others => '0');
 
     --Rendering
-    signal h_pxl_count                  :       std_logic_vector(10 downto 0)   := (others => '0');
-    signal v_pxl_count                  :       std_logic_vector(10 downto 0)   := (others => '0');
-    signal v_pxl_valid                  :       std_logic                       := '0';
+    signal h_pxl_count                      :       std_logic_vector(10 downto 0)   := (others => '0');
+    signal v_pxl_count                      :       std_logic_vector(10 downto 0)   := (others => '0');
+    signal v_pxl_valid                      :       std_logic                       := '0';
 
-    signal res_sel                      :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal render_addr                  :       std_logic_vector(4 downto 0)    := (others => '0');
-    signal check_addr                   :       std_logic_vector(8 downto 0)    := (others => '0');
-    signal board_addr                   :       std_logic_vector(5 downto 0)    := (others => '0');
-    signal overlay_data                 :       std_logic_vector(31 downto 0)   := (others => '0');
-    signal render_data_out              :       std_logic_vector(29 downto 0)   := (others => '0');
+    signal res_sel                          :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal render_addr                      :       std_logic_vector(4 downto 0)    := (others => '0');
+    signal check_addr                       :       std_logic_vector(8 downto 0)    := (others => '0');
+    signal board_addr                       :       std_logic_vector(5 downto 0)    := (others => '0');
+    signal overlay_data                     :       std_logic_vector(31 downto 0)   := (others => '0');
+    signal render_data_out                  :       std_logic_vector(29 downto 0)   := (others => '0');
 
     --Storing
-    signal mem_op                       :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal mem_row                      :       std_logic_vector(4 downto 0)    := (others => '0');
+    signal mem_op                           :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal mem_row                          :       std_logic_vector(4 downto 0)    := (others => '0');
 
-    signal logic_addr                   :       std_logic_vector(5 downto 0)    := (others => '0');
-    signal logic_data_in                :       std_logic_vector(31 downto 0)   := (others => '0');
-    signal logic_data_out               :       std_logic_vector(31 downto 0)   := (others => '0');
-    signal logic_wren                   :       std_logic                       := '0';
+    signal logic_addr                       :       std_logic_vector(5 downto 0)    := (others => '0');
+    signal logic_data_in                    :       std_logic_vector(31 downto 0)   := (others => '0');
+    signal logic_data_out                   :       std_logic_vector(31 downto 0)   := (others => '0');
+    signal logic_wren                       :       std_logic                       := '0';
 
     --User input
-    signal inp_mode                     :       std_logic                       := '0';
+    signal inp_mode                         :       std_logic                       := '0';
 
-    signal usr_lr                       :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal usr_lr_en                    :       std_logic                       := '0';
-    signal usr_dwn                      :       std_logic                       := '0';
-    signal usr_dwn_en                   :       std_logic                       := '0';
-    signal usr_rot                      :       std_logic                       := '0';
-    signal usr_rot_en                   :       std_logic                       := '0';
+    signal usr_lr                           :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal usr_lr_en                        :       std_logic                       := '0';
+    signal usr_dwn                          :       std_logic                       := '0';
+    signal usr_dwn_en                       :       std_logic                       := '0';
+    signal usr_rot                          :       std_logic                       := '0';
+    signal usr_rot_en                       :       std_logic                       := '0';
 
-    signal dem_lr                       :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal dem_lr_en                    :       std_logic                       := '0';
-    signal dem_dwn                      :       std_logic                       := '0';
-    signal dem_dwn_en                   :       std_logic                       := '0';
-    signal dem_rot                      :       std_logic                       := '0';
-    signal dem_rot_en                   :       std_logic                       := '0';
+    signal dem_lr                           :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal dem_lr_en                        :       std_logic                       := '0';
+    signal dem_dwn                          :       std_logic                       := '0';
+    signal dem_dwn_en                       :       std_logic                       := '0';
+    signal dem_rot                          :       std_logic                       := '0';
+    signal dem_rot_en                       :       std_logic                       := '0';
 
-    signal inp_lr                       :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal inp_lr_en                    :       std_logic                       := '0';
-    signal inp_dwn                      :       std_logic                       := '0';
-    signal inp_dwn_en                   :       std_logic                       := '0';
-    signal inp_rot                      :       std_logic                       := '0';
-    signal inp_rot_en                   :       std_logic                       := '0';
+    signal inp_lr                           :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal inp_lr_en                        :       std_logic                       := '0';
+    signal inp_dwn                          :       std_logic                       := '0';
+    signal inp_dwn_en                       :       std_logic                       := '0';
+    signal inp_rot                          :       std_logic                       := '0';
+    signal inp_rot_en                       :       std_logic                       := '0';
 
     --Logic
-    signal game_tick                    :       std_logic                       := '0';
-    signal game_state                   :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal game_new_piece               :       std_logic                       := '0';
-    signal game_piece_type              :       std_logic_vector(2 downto 0)    := (others => '0');
-    signal game_piece_type_next         :       std_logic_vector(2 downto 0)    := (others => '0');
-    signal game_piece_h                 :       std_logic_vector(4 downto 0)    := (others => '0');
-    signal game_piece_v                 :       std_logic_vector(4 downto 0)    := (others => '0');
-    signal game_piece_r                 :       std_logic_vector(1 downto 0)    := (others => '0');
-    signal game_row_full                :       std_logic                       := '0';
-    signal game_overlap                 :       std_logic                       := '0';
-    signal game_over                    :       std_logic                       := '0';
+    signal game_tick                        :       std_logic                       := '0';
+    signal game_state                       :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal game_new_piece                   :       std_logic                       := '0';
+    signal game_piece_type                  :       std_logic_vector(2 downto 0)    := (others => '0');
+    signal game_piece_type_next             :       std_logic_vector(2 downto 0)    := (others => '0');
+    signal game_piece_h                     :       std_logic_vector(4 downto 0)    := (others => '0');
+    signal game_piece_v                     :       std_logic_vector(4 downto 0)    := (others => '0');
+    signal game_piece_r                     :       std_logic_vector(1 downto 0)    := (others => '0');
+    signal game_row_full                    :       std_logic                       := '0';
+    signal game_overlap                     :       std_logic                       := '0';
+    signal game_over                        :       std_logic                       := '0';
 
     --Score
-    signal line_clear_count             :       std_logic_vector(23 downto 0)   := (others => '0');
+    signal line_clear_count                 :       std_logic_vector(23 downto 0)   := (others => '0');
 
     component pixel_clk_pll is
         port (
-            refclk                      : in    std_logic                       := '0';
-            rst                         : in    std_logic                       := '0';
-            outclk_0                    : out   std_logic;
-            outclk_1                    : out   std_logic;
-            outclk_2                    : out   std_logic
+            refclk                          : in    std_logic                       := '0';
+            rst                             : in    std_logic                       := '0';
+            outclk_0                        : out   std_logic;
+            outclk_1                        : out   std_logic;
+            outclk_2                        : out   std_logic
         );
     end component pixel_clk_pll;
     
     component button_input is
         port (
-            CLK                         : in    std_logic;
-            KEYS                        : in    std_logic_vector(3 downto 0);
+            CLK                             : in    std_logic;
+            KEYS                            : in    std_logic_vector(3 downto 0);
 
-            USR_INPUT_LR                : out   std_logic_vector(1 downto 0);
-            USR_INPUT_LR_EN             : out   std_logic;
-            USR_INPUT_DWN               : out   std_logic;
-            USR_INPUT_DWN_EN            : out   std_logic;
-            USR_INPUT_ROT               : out   std_logic;
-            USR_INPUT_ROT_EN            : out   std_logic
+            USR_INPUT_LR                    : out   std_logic_vector(1 downto 0);
+            USR_INPUT_LR_EN                 : out   std_logic;
+            USR_INPUT_DWN                   : out   std_logic;
+            USR_INPUT_DWN_EN                : out   std_logic;
+            USR_INPUT_ROT                   : out   std_logic;
+            USR_INPUT_ROT_EN                : out   std_logic
         );
     end component;
 
     component demo_mode is
         port (
-            CLK                         : in    std_logic;
-            GAME_TICK                   : in    std_logic;
-            GAME_STATE                  : in    std_logic_vector(1 downto 0);
+            CLK                             : in    std_logic;
+            GAME_TICK                       : in    std_logic;
+            GAME_STATE                      : in    std_logic_vector(1 downto 0);
 
-            DEMO_INPUT_LR               : out   std_logic_vector(1 downto 0);
-            DEMO_INPUT_LR_EN            : out   std_logic;
-            DEMO_INPUT_DWN              : out   std_logic;
-            DEMO_INPUT_DWN_EN           : out   std_logic;
-            DEMO_INPUT_ROT              : out   std_logic;
-            DEMO_INPUT_ROT_EN           : out   std_logic
+            DEMO_INPUT_LR                   : out   std_logic_vector(1 downto 0);
+            DEMO_INPUT_LR_EN                : out   std_logic;
+            DEMO_INPUT_DWN                  : out   std_logic;
+            DEMO_INPUT_DWN_EN               : out   std_logic;
+            DEMO_INPUT_ROT                  : out   std_logic;
+            DEMO_INPUT_ROT_EN               : out   std_logic
         );
     end component;
 
     component game_controller is
         port (
-            CLK                         : in    std_logic;
-            RENDER_BUSY                 : in    std_logic;
+            CLK                             : in    std_logic;
+            RENDER_BUSY                     : in    std_logic;
 
-            USR_INPUT_LR                : in    std_logic_vector(1 downto 0);
-            USR_INPUT_LR_EN             : in    std_logic;
-            USR_INPUT_DWN               : in    std_logic;
-            USR_INPUT_DWN_EN            : in    std_logic;
-            USR_INPUT_ROT               : in    std_logic;
-            USR_INPUT_ROT_EN            : in    std_logic;
+            USR_INPUT_LR                    : in    std_logic_vector(1 downto 0);
+            USR_INPUT_LR_EN                 : in    std_logic;
+            USR_INPUT_DWN                   : in    std_logic;
+            USR_INPUT_DWN_EN                : in    std_logic;
+            USR_INPUT_ROT                   : in    std_logic;
+            USR_INPUT_ROT_EN                : in    std_logic;
 
-            GAME_TICK                   : in    std_logic;
-            GAME_PIECE_H                : out   std_logic_vector(4 downto 0);
-            GAME_PIECE_V                : out   std_logic_vector(4 downto 0);
-            GAME_PIECE_R                : out   std_logic_vector(1 downto 0);
-            GAME_ROW_FULL               : in    std_logic;
-            GAME_OVERLAP                : in    std_logic;
-            GAME_OVER                   : in    std_logic;
+            GAME_TICK                       : in    std_logic;
+            GAME_PIECE_H                    : out   std_logic_vector(4 downto 0);
+            GAME_PIECE_V                    : out   std_logic_vector(4 downto 0);
+            GAME_PIECE_R                    : out   std_logic_vector(1 downto 0);
+            GAME_ROW_FULL                   : in    std_logic;
+            GAME_OVERLAP                    : in    std_logic;
+            GAME_OVER                       : in    std_logic;
 
-            MEM_OP                      : out   std_logic_vector(1 downto 0);
-            MEM_ROW                     : out   std_logic_vector(4 downto 0);
+            MEM_OP                          : out   std_logic_vector(1 downto 0);
+            MEM_ROW                         : out   std_logic_vector(4 downto 0);
 
-            CHECK_ADDR                  : out   std_logic_vector(8 downto 0);
+            CHECK_ADDR                      : out   std_logic_vector(8 downto 0);
 
-            GAME_NEW_PIECE              : out   std_logic;
-            GAME_STATE                  : out   std_logic_vector(1 downto 0);
-            GAME_SCORE                  : out   std_logic_vector(23 downto 0)
+            GAME_NEW_PIECE                  : out   std_logic;
+            GAME_STATE                      : out   std_logic_vector(1 downto 0);
+            GAME_SCORE                      : out   std_logic_vector(23 downto 0)
         );
     end component;
 
     component piece_generator is
         port (
-            CLK                                 : in    std_logic;
-            GAME_STATE                          : in    std_logic_vector(1 downto 0);
-            GAME_NEW_PIECE                      : in    std_logic;
+            CLK                             : in    std_logic;
+            GAME_STATE                      : in    std_logic_vector(1 downto 0);
+            GAME_NEW_PIECE                  : in    std_logic;
 
-            GAME_PIECE_TYPE                     : out   std_logic_vector(2 downto 0);
-            GAME_PIECE_TYPE_NEXT                : out   std_logic_vector(2 downto 0)
+            GAME_PIECE_TYPE                 : out   std_logic_vector(2 downto 0);
+            GAME_PIECE_TYPE_NEXT            : out   std_logic_vector(2 downto 0)
         );
     end component;
 
     component board_ram is
         port (
-            address_a                   : in    std_logic_vector(5 downto 0);
-            address_b                   : in    std_logic_vector(5 downto 0);
-            clock                       : in    std_logic                       := '1';
-            data_a                      : in    std_logic_vector(31 downto 0);
-            data_b                      : in    std_logic_vector(31 downto 0);
-            wren_a                      : in    std_logic                       := '0';
-            wren_b                      : in    std_logic                       := '0';
-            q_a                         : out   std_logic_vector(31 downto 0);
-            q_b                         : out   std_logic_vector(31 downto 0)
+            address_a                       : in    std_logic_vector(5 downto 0);
+            address_b                       : in    std_logic_vector(5 downto 0);
+            clock                           : in    std_logic                       := '1';
+            data_a                          : in    std_logic_vector(31 downto 0);
+            data_b                          : in    std_logic_vector(31 downto 0);
+            wren_a                          : in    std_logic                       := '0';
+            wren_b                          : in    std_logic                       := '0';
+            q_a                             : out   std_logic_vector(31 downto 0);
+            q_b                             : out   std_logic_vector(31 downto 0)
         );
     end component;
 
     component board_operator is
         port (
-            CLK                         : in    std_logic;
-            MEM_OP                      : in    std_logic_vector(1 downto 0);
-            MEM_ROW                     : in    std_logic_vector(4 downto 0);
+            CLK                             : in    std_logic;
+            MEM_OP                          : in    std_logic_vector(1 downto 0);
+            MEM_ROW                         : in    std_logic_vector(4 downto 0);
 
-            CHECK_ADDR                  : in    std_logic_vector(8 downto 0);
-            LOGIC_DATA_OUT              : out   std_logic_vector(31 downto 0);
-            LOGIC_DATA_IN               : in    std_logic_vector(31 downto 0);
-            LOGIC_WREN                  : out   std_logic;
+            CHECK_ADDR                      : in    std_logic_vector(8 downto 0);
+            LOGIC_DATA_OUT                  : out   std_logic_vector(31 downto 0);
+            LOGIC_DATA_IN                   : in    std_logic_vector(31 downto 0);
+            LOGIC_WREN                      : out   std_logic;
 
-            BOARD_DATA_IN               : in    std_logic_vector(31 downto 0)
+            BOARD_DATA_IN                   : in    std_logic_vector(31 downto 0)
         );
     end component;
 
     component piece_overlay is
         port (
-            CLK                         : in    std_logic;
-            ROW_IN                      : in    std_logic_vector(31 downto 0);
-            ROW_ADDR                    : in    std_logic_vector(4 downto 0);
-            ROW_OUT                     : out   std_logic_vector(29 downto 0);
+            CLK                             : in    std_logic;
+            ROW_IN                          : in    std_logic_vector(31 downto 0);
+            ROW_ADDR                        : in    std_logic_vector(4 downto 0);
+            ROW_OUT                         : out   std_logic_vector(29 downto 0);
             
-            CHECK_ADDR                  : in    std_logic_vector(8 downto 0);
-            CHECK_DATA                  : in    std_logic_vector(31 downto 0);
+            CHECK_ADDR                      : in    std_logic_vector(8 downto 0);
+            CHECK_DATA                      : in    std_logic_vector(31 downto 0);
 
-            GAME_STATE                  : in    std_logic_vector(1 downto 0);
-            GAME_PIECE_TYPE             : in    std_logic_vector(2 downto 0);
-            GAME_PIECE_H                : in    std_logic_vector(4 downto 0);
-            GAME_PIECE_V                : in    std_logic_vector(4 downto 0);
-            GAME_PIECE_R                : in    std_logic_vector(1 downto 0);
-            GAME_ROW_FULL               : out   std_logic;
-            GAME_OVERLAP                : out   std_logic;
-            GAME_OVER                   : out   std_logic
+            GAME_STATE                      : in    std_logic_vector(1 downto 0);
+            GAME_PIECE_TYPE                 : in    std_logic_vector(2 downto 0);
+            GAME_PIECE_H                    : in    std_logic_vector(4 downto 0);
+            GAME_PIECE_V                    : in    std_logic_vector(4 downto 0);
+            GAME_PIECE_R                    : in    std_logic_vector(1 downto 0);
+            GAME_ROW_FULL                   : out   std_logic;
+            GAME_OVERLAP                    : out   std_logic;
+            GAME_OVER                       : out   std_logic
         );
     end component;
 
     component board_renderer is
         port (
-            PXL_CLK                     : in    std_logic;
-            BOARD_ROW_INDEX             : out   std_logic_vector(4 downto 0);
-            BOARD_ROW                   : in    std_logic_vector(29 downto 0);
-            BOARD_RDY                   : out   std_logic;
+            PXL_CLK                         : in    std_logic;
+            BOARD_ROW_INDEX                 : out   std_logic_vector(4 downto 0);
+            BOARD_ROW                       : in    std_logic_vector(29 downto 0);
+            BOARD_RDY                       : out   std_logic;
 
-            RES_SEL                     : in    std_logic_vector(1 downto 0);
-            H_PXL_COUNT                 : in    std_logic_vector(10 downto 0);
-            V_PXL_COUNT                 : in    std_logic_vector(10 downto 0);
+            RES_SEL                         : in    std_logic_vector(1 downto 0);
+            H_PXL_COUNT                     : in    std_logic_vector(10 downto 0);
+            V_PXL_COUNT                     : in    std_logic_vector(10 downto 0);
 
-            GAME_STATE                  : in    std_logic_vector(1 downto 0);
-            NEXT_PIECE                  : in    std_logic_vector(2 downto 0);
+            GAME_STATE                      : in    std_logic_vector(1 downto 0);
+            NEXT_PIECE                      : in    std_logic_vector(2 downto 0);
 
-            VGA_R                       : out   std_logic_vector(7 downto 0);
-            VGA_G                       : out   std_logic_vector(7 downto 0);
-            VGA_B                       : out   std_logic_vector(7 downto 0)
+            VGA_R                           : out   std_logic_vector(7 downto 0);
+            VGA_G                           : out   std_logic_vector(7 downto 0);
+            VGA_B                           : out   std_logic_vector(7 downto 0)
         );
     end component;
 
     component VGA_driver is
         port (
-            PXL_CLK                     : in    std_logic;
-            RES_SEL                     : in    std_logic_vector(1 downto 0);
-            H_PXL_COUNT                 : out   std_logic_vector(10 downto 0);
-            V_PXL_COUNT                 : out   std_logic_vector(10 downto 0);
+            PXL_CLK                         : in    std_logic;
+            RES_SEL                         : in    std_logic_vector(1 downto 0);
+            H_PXL_COUNT                     : out   std_logic_vector(10 downto 0);
+            V_PXL_COUNT                     : out   std_logic_vector(10 downto 0);
             
-            H_PXL_VALID                 : out   std_logic;
-            V_PXL_VALID                 : out   std_logic;
+            H_PXL_VALID                     : out   std_logic;
+            V_PXL_VALID                     : out   std_logic;
 
-            VGA_CLK_OUT                 : out   std_logic;
-            VGA_BLANK_N_OUT             : out   std_logic;
-            VGA_HS_OUT                  : out   std_logic;
-            VGA_VS_OUT                  : out   std_logic;
-            VGA_SYNC_N_OUT              : out   std_logic
+            VGA_CLK_OUT                     : out   std_logic;
+            VGA_BLANK_N_OUT                 : out   std_logic;
+            VGA_HS_OUT                      : out   std_logic;
+            VGA_VS_OUT                      : out   std_logic;
+            VGA_SYNC_N_OUT                  : out   std_logic
         );
     end component;
 
     component score_to_hex is
         port (
-            LINE_CLEAR_CNT              : in    std_logic_vector(23 downto 0);
+            LINE_CLEAR_CNT                  : in    std_logic_vector(23 downto 0);
 
-            HEX0                        : out   std_logic_vector(6 downto 0);
-            HEX1                        : out   std_logic_vector(6 downto 0);
-            HEX2                        : out   std_logic_vector(6 downto 0);
-            HEX3                        : out   std_logic_vector(6 downto 0);
-            HEX4                        : out   std_logic_vector(6 downto 0);
-            HEX5                        : out   std_logic_vector(6 downto 0)
+            HEX0                            : out   std_logic_vector(6 downto 0);
+            HEX1                            : out   std_logic_vector(6 downto 0);
+            HEX2                            : out   std_logic_vector(6 downto 0);
+            HEX3                            : out   std_logic_vector(6 downto 0);
+            HEX4                            : out   std_logic_vector(6 downto 0);
+            HEX5                            : out   std_logic_vector(6 downto 0)
         );
     end component;
 
