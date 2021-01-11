@@ -11,7 +11,7 @@ When the home screen is visible (the screen showing "Tetris") a few settings can
 ### Resolution (Switches 9 and 8)
 
 | Switch position | Format name | Resolution | Refreshrate |
-| :----: | :----: | :---------: | :--------: | :---------: |
+| :-------------: | :---------: | :--------: | :---------: |
 | "00" | VGA | 640 x 480 | 60 |
 | "01" | SVGA | 800 x 600 | 60 |
 | "10" | XGA | 1024 x 768 | 60 |
