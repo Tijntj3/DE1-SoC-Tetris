@@ -8,7 +8,7 @@ The game can be uploaded to de board using the pre-built .sof in the `Built` fol
 
 ![blockdiagram](BlockDiagram.png "Simplified block diagram")
 
-## Resource utalization
+## Resource utilization
 
 | Logic (ALMs) | Registers | Block memory (bits) | PLLs |
 | :----------: | :-------: | :-----------------: | :--: |
