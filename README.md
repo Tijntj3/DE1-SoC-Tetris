@@ -4,6 +4,16 @@ Repository that contains the sources for the DE1-SoC Tetris project. It is the f
 
 The game can be uploaded to de board using the pre-built .sof in the `Built` folder.
 
+## Simplified block diagram
+
+![blockdiagram](BlockDiagram.png "Simplified block diagram")
+
+## Resource utalization
+
+| Logic (ALMs) | Registers | Block memory (bits) | PLLs |
+| :----------: | :-------: | :-----------------: | :--: |
+| 378 | 329 | 97 | 4224 | 1 |
+
 ## Controls
 
 When the home screen is visible (the screen showing "Tetris") a few settings can be changed:
